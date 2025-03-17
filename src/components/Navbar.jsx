@@ -19,7 +19,7 @@ const Navbar = () => {
             window.scroll(0, 0)
           }}
           className={"flex items-center gap-2"}>
-          <img alt='logo' className={"w-9 h-9 object-contain"} src={logo} />
+          <img loading={"lazy"} alt='logo' className={"w-9 h-9 object-contain"} src={logo} />
           <p className='text-white font-bold cursor-pointer text-[18px] flex'>Ramesh &nbsp; <span className={"sm:block hidden"}>Chathuranga</span></p>
         </Link>
         <ul className='list-none hidden sm:flex flex-row gap-10'>

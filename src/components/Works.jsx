@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState, useEffect} from 'react'
 import {Tilt} from "react-tilt";
 import { motion } from "framer-motion";
 
@@ -6,7 +6,7 @@ import { styles } from "../styles";
 import { github } from "../assets";
 import { SectionWrapper } from "../hoc";
 import { projects } from "../constants";
-import { fadeIn, textVariant } from "../utils/mortion";
+import { fadeIn, textVariant, slideIn } from "../utils/mortion";
 
 const ProjectCard = ({
   index,
@@ -15,16 +15,20 @@ const ProjectCard = ({
   tags,
   image,
   source_code_link,
+  isMobile
 }) => {
+ 
   return (
-    <motion.div variants={fadeIn("up", "spring", index * 0.5, 0.75)}>
+    <motion.div
+     variants={!isMobile? {} :fadeIn("up", "spring", index * 0.5, 0.75)}
+    >
       <Tilt
         options={{
           max: 45,
           scale: 1,
           speed: 450,
         }}
-        className='bg-tertiary p-5 rounded-2xl sm:w-[360px] w-full'
+        className='bg-tertiary sm:p-5 px-0 py-5 rounded-2xl sm:w-[360px] w-full'
       >
         <div className='relative w-full h-[230px]'>
           <img
@@ -68,9 +72,28 @@ const ProjectCard = ({
 };
 
 const Works = () => {
+const [isMobile, setMobile]=useState(false);
+
+  useEffect(()=>{
+   const mediaQuery = window.matchMedia('(max-width: 600px)');
+   setMobile(mediaQuery.matches)
+   
+   const handleMediaQueryChange = (event)=>{
+    setMobile(event.matches)
+   };
+
+   mediaQuery.addEventListener('change',handleMediaQueryChange)
+
+   return () =>{
+    mediaQuery.removeEventListener('change',handleMediaQueryChange)
+   }
+  },[])
+console.log(isMobile)
   return (
     <>
-      <motion.div variants={textVariant()}>
+      <motion.div
+       variants={textVariant()}
+       >
         <p className={`${styles.sectionSubText} `}>My work</p>
         <h2 className={`${styles.sectionHeadText}`}>Projects.</h2>
       </motion.div>
@@ -90,7 +113,7 @@ const Works = () => {
 
       <div className='mt-20 flex flex-wrap gap-7'>
         {projects.map((project, index) => (
-          <ProjectCard key={`project-${index}`} index={index} {...project} />
+          <ProjectCard key={`project-${index}`} index={index} {...project} isMobile={isMobile} />
         ))}
       </div>
     </>
