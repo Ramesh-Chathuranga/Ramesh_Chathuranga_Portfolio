@@ -1,5 +1,5 @@
-import React,{useState, useEffect} from 'react'
-import {Tilt} from "react-tilt";
+import React from "react";
+import { Tilt } from "react-tilt";
 import { motion } from "framer-motion";
 
 import { styles } from "../styles";
@@ -15,20 +15,38 @@ const ProjectCard = ({
   tags,
   image,
   source_code_link,
-  isMobile
 }) => {
- 
   return (
+
     <motion.div
-     variants={!isMobile? {} :fadeIn("up", "spring", index * 0.5, 0.75)}
+      // variants={textVariant()}
+      // variants={fadeIn("down", "spring", , )}
+      animate={{
+        x: 0,
+        y: 100,
+        opacity: 1,
+        transition: {
+          default: { type: "spring" },
+          opacity: { ease: "linear" }
+        }
+      }}
+
+      transition={{
+        duration: 0.75,
+        delay: index * 0.5,
+        ease: [0, 0.71, 0.2, 1.01],
+        type: "spring"
+      }}
     >
+
+
       <Tilt
         options={{
           max: 45,
           scale: 1,
           speed: 450,
         }}
-        className='bg-tertiary sm:p-5 px-0 py-5 rounded-2xl sm:w-[360px] w-full'
+        className='bg-tertiary p-5 rounded-2xl sm:w-[360px] w-full'
       >
         <div className='relative w-full h-[230px]'>
           <img
@@ -67,33 +85,16 @@ const ProjectCard = ({
           ))}
         </div>
       </Tilt>
+
+
     </motion.div>
   );
 };
 
 const Works = () => {
-const [isMobile, setMobile]=useState(false);
-
-  useEffect(()=>{
-   const mediaQuery = window.matchMedia('(max-width: 600px)');
-   setMobile(mediaQuery.matches)
-   
-   const handleMediaQueryChange = (event)=>{
-    setMobile(event.matches)
-   };
-
-   mediaQuery.addEventListener('change',handleMediaQueryChange)
-
-   return () =>{
-    mediaQuery.removeEventListener('change',handleMediaQueryChange)
-   }
-  },[])
-console.log(isMobile)
   return (
     <>
-      <motion.div
-       variants={textVariant()}
-       >
+      <motion.div variants={textVariant()}>
         <p className={`${styles.sectionSubText} `}>My work</p>
         <h2 className={`${styles.sectionHeadText}`}>Projects.</h2>
       </motion.div>
@@ -111,9 +112,9 @@ console.log(isMobile)
         </motion.p>
       </div>
 
-      <div className='mt-20 flex flex-wrap gap-7'>
+      <div className='mt-20 flex flex-wrap gap-6'>
         {projects.map((project, index) => (
-          <ProjectCard key={`project-${index}`} index={index} {...project} isMobile={isMobile} />
+          <ProjectCard key={`project-${index}`} index={index} {...project} />
         ))}
       </div>
     </>
